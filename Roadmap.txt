@@ -1,0 +1,9 @@
+- Create a window X
+- Create tiles X
+- Display a character X
+- Move a character X
+- Create a sprite
+- Move sprite
+- Animate sprite
+- Add background/tiles
+- Add enemy
