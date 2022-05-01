@@ -1,3 +1,5 @@
+package main;
+
 import javax.swing.JPanel;
 
 import java.awt.Graphics;
@@ -5,16 +7,17 @@ import java.awt.Graphics2D;
 import java.awt.Color;
 import java.awt.Dimension;
 
+import entities.Player;
 
 public class GamePanel extends JPanel implements Runnable {
     // Screen Settings
-    final int originalTileSize = 16; // 16x16 tile size
-    final int scale = 3;
+    final int originalTileSize = 32; // 32x32 tile size
+    final int scale = 2;
 
-    final int tileSize = originalTileSize * scale; // 48x48
-    final int maxScreenRow = 16; 
-    final int maxScreenCol = 20;
-    final int screenWidth = tileSize * maxScreenCol; // 960
+    public final int tileSize = originalTileSize * scale; // 64x64
+    final int maxScreenRow = 12; 
+    final int maxScreenCol = 16;
+    final int screenWidth = tileSize * maxScreenCol; // 1,024
     final int screenHeight = tileSize * maxScreenRow; // 768
 
     int FPS = 60;
@@ -22,9 +25,7 @@ public class GamePanel extends JPanel implements Runnable {
     KeyHandler keyHandler = new KeyHandler();
     Thread gameThread;
 
-
-    // Set Players default position
-    int playerX = 480, playerY = 384, playerSpeed = 4;
+    Player player = new Player(this, keyHandler);
 
     public GamePanel() {
         this.setPreferredSize(new Dimension(screenWidth, screenHeight));
@@ -67,18 +68,7 @@ public class GamePanel extends JPanel implements Runnable {
     }
 
     public void update() {
-        if (keyHandler.upPressed) {
-            playerY -= playerSpeed;
-        }
-        if (keyHandler.downPressed) {
-            playerY += playerSpeed;
-        }
-        if (keyHandler.leftPressed) {
-            playerX -= playerSpeed;
-        }
-        if (keyHandler.rightPressed) {
-            playerX += playerSpeed;
-        }
+        player.update();
     }
     
     @Override
@@ -87,8 +77,7 @@ public class GamePanel extends JPanel implements Runnable {
 
         Graphics2D g2 = (Graphics2D)g; // Convert g to a Graphics2D object becuase it has better functions and what not for geometry
 
-        g2.setColor(Color.cyan);
-        g2.fillRect(playerX, playerY, tileSize, tileSize);
+        player.draw(g2);
 
         g2.dispose(); // Releases system resources
     }
