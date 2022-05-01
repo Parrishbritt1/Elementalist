@@ -45,9 +45,9 @@ public class TileManager {
             BufferedReader bufferedReader = new BufferedReader(new InputStreamReader(inputStream));
 
             int row = 0, col = 0;
-            map = new int[gp.maxScreenRow][gp.maxScreenCol]; 
+            map = new int[gp.maxWorldRow][gp.maxWorldCol]; 
 
-            while (col < gp.maxScreenCol && row < gp.maxScreenRow) {
+            while (col < gp.maxWorldCol && row < gp.maxWorldRow) {
                 String[] line = bufferedReader.readLine().split(" ");
                 for (String digit : line) {
                     int num = Integer.parseInt(digit);
@@ -68,16 +68,17 @@ public class TileManager {
      * @param g2 Graphics2D object for drawing.
      */
     public void draw(Graphics2D g2) {
-        int x = 0, y = 0;
 
-        for (int row = 0; row < map.length; row++) {
-            for (int col = 0; col < map[row].length; col++) {
-                g2.drawImage(tiles[map[row][col]].image, x, y, gp.tileSize, gp.tileSize, null);
-                x += gp.tileSize;
+        for (int worldRow = 0; worldRow < map.length; worldRow++) { // 60
+            for (int worldCol = 0; worldCol < map[worldRow].length; worldCol++) { // 80
+
+                int worldX = worldCol * gp.tileSize;
+                int worldY = worldRow * gp.tileSize;
+                int screenX = worldX - gp.player.worldX + gp.player.screenX;
+                int screenY = worldY - gp.player.worldY + gp.player.screenY;
+
+                g2.drawImage(tiles[map[worldRow][worldCol]].image, screenX, screenY, gp.tileSize, gp.tileSize, null);
             }
-
-            x = 0;
-            y += gp.tileSize;
         }
     }
 }

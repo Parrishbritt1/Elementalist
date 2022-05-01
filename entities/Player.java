@@ -16,6 +16,8 @@ public class Player extends Entity {
     GamePanel gp;
     KeyHandler keyH;
 
+    public final int screenX, screenY;
+
     /**
      * Constructor of Player
      * @param gp Game Panel 
@@ -24,6 +26,10 @@ public class Player extends Entity {
     public Player(GamePanel gp, KeyHandler keyH) {
         this.gp = gp;
         this.keyH = keyH;
+
+        screenX = gp.screenWidth/2 - (gp.tileSize/2);
+        screenY = gp.screenHeight/2 - (gp.tileSize/2);
+
         this.setStartValues();
         this.getPlayerImage();
     }
@@ -33,8 +39,8 @@ public class Player extends Entity {
      */
     private void setStartValues() {
         // Set Players default position
-        this.x = 480;
-        this.y = 384;
+        this.worldX = gp.tileSize * 40;
+        this.worldY = gp.tileSize * 30;
         this.speed = 4;
         setDirection(Direction.DOWN);
     }
@@ -62,19 +68,19 @@ public class Player extends Entity {
 
             if (keyH.upPressed) {
                 setDirection(Direction.UP);
-                this.y -= this.speed;
+                this.worldY -= this.speed;
             }
             if (keyH.downPressed) {
                 setDirection(Direction.DOWN);
-                this.y += this.speed;
+                this.worldY += this.speed;
             }
             if (keyH.leftPressed) {
                 setDirection(Direction.LEFT);
-                this.x -= this.speed;
+                this.worldX -= this.speed;
             }
             if (keyH.rightPressed) {
                 setDirection(Direction.RIGHT);
-                this.x += this.speed;
+                this.worldX += this.speed;
             }
         
             spriteCounter++;
@@ -151,6 +157,6 @@ public class Player extends Entity {
         }
 
         // Draw Player Image.
-        g2.drawImage(image, this.x, this.y, gp.tileSize, gp.tileSize, null);
+        g2.drawImage(image, screenX, screenY, gp.tileSize, gp.tileSize, null);
     }
 }

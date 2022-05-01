@@ -6,7 +6,7 @@ public abstract class Entity {
     /**
      * The X and Y positions on screen. (0, 0) top left.
      */
-    public int x, y;
+    public int worldX, worldY;
     
     /**
      * The amount of pixels this entity travels when moved.
