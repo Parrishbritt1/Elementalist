@@ -7,7 +7,6 @@ import java.awt.Graphics2D;
 import java.awt.image.BufferedImage;
 
 import java.io.IOException;
-import java.io.File;
 
 import javax.imageio.ImageIO;
 
@@ -90,6 +89,7 @@ public class Player extends Entity {
             }
         }  
         if (!this.isMoving) spriteNum = 3;
+        this.isMoving = false;
     }
 
     /**

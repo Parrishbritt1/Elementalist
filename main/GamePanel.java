@@ -8,6 +8,7 @@ import java.awt.Color;
 import java.awt.Dimension;
 
 import entities.Player;
+import tile.TileManager;
 
 public class GamePanel extends JPanel implements Runnable {
     // Screen Settings
@@ -15,17 +16,19 @@ public class GamePanel extends JPanel implements Runnable {
     final int scale = 2;
 
     public final int tileSize = originalTileSize * scale; // 64x64
-    final int maxScreenRow = 12; 
-    final int maxScreenCol = 16;
+    public final int maxScreenRow = 12; 
+    public final int maxScreenCol = 16;
     final int screenWidth = tileSize * maxScreenCol; // 1,024
     final int screenHeight = tileSize * maxScreenRow; // 768
 
     int FPS = 60;
 
+    TileManager tileManager = new TileManager(this);
     KeyHandler keyHandler = new KeyHandler();
     Thread gameThread;
 
     Player player = new Player(this, keyHandler);
+
 
     public GamePanel() {
         this.setPreferredSize(new Dimension(screenWidth, screenHeight));
@@ -77,6 +80,7 @@ public class GamePanel extends JPanel implements Runnable {
 
         Graphics2D g2 = (Graphics2D)g; // Convert g to a Graphics2D object becuase it has better functions and what not for geometry
 
+        tileManager.draw(g2);
         player.draw(g2);
 
         g2.dispose(); // Releases system resources
