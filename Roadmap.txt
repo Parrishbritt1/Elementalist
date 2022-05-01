@@ -2,8 +2,15 @@
 - Create tiles X
 - Display a character X
 - Move a character X
-- Create a sprite
-- Move sprite
-- Animate sprite
-- Add background/tiles
+- Create a sprite X
+- Move sprite X
+- Animate sprite X
+- Add background/tiles X
+- Create big world map
+- Make new camera for player to stay in center of screen
+- background tiles move 
 - Add enemy
+- Add Attack
+- Healthbars
+- Collision registration
+- Elements

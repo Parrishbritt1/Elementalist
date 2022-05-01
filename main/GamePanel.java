@@ -51,6 +51,8 @@ public class GamePanel extends JPanel implements Runnable {
         double delta = 0;
         long lastTime = System.nanoTime(); // Current Nanotime which is a long number ex: 5232424000
         
+        tileManager.setMap("../maps/map01.txt");
+        
         while (gameThread != null) {
             
             // Update and draw only 60 times per second (whatever FPS is set to)
