@@ -17,6 +17,11 @@ public class Player extends Entity {
     GamePanel gp;
     KeyHandler keyH;
 
+    /**
+     * Constructor of Player
+     * @param gp Game Panel 
+     * @param keyH
+     */
     public Player(GamePanel gp, KeyHandler keyH) {
         this.gp = gp;
         this.keyH = keyH;
@@ -24,69 +29,78 @@ public class Player extends Entity {
         this.getPlayerImage();
     }
 
+    /**
+     * Starting position of Player when Instantiated.
+     */
     private void setStartValues() {
         // Set Players default position
-        x = 480;
-        y = 384;
-        speed = 4;
-        dir = Direction.DOWN;
+        this.x = 480;
+        this.y = 384;
+        this.speed = 4;
+        setDirection(Direction.DOWN);
     }
 
+    /**
+     * Retrieves all of the images of Player.
+     */
     public void getPlayerImage() {
         try {
-            downIdle = ImageIO.read(getClass().getResourceAsStream("../images/down-idle-32.png"));
-            down1 = ImageIO.read(getClass().getResourceAsStream("../images/down-running1-32.png"));
-            down2 = ImageIO.read(getClass().getResourceAsStream("../images/down-running2-32.png"));
+            downIdle = ImageIO.read(getClass().getResourceAsStream("../images/player/down-idle-32.png"));
+            down1 = ImageIO.read(getClass().getResourceAsStream("../images/player/down-running1-32.png"));
+            down2 = ImageIO.read(getClass().getResourceAsStream("../images/player/down-running2-32.png"));
 
         } catch (IOException e) {
             e.printStackTrace();
         }
     }
 
+    /**
+     * UPDATES PLAYER INFORMATION. Part 2 OF GAME LOOP (MOVING & ABILITIES info updates)
+     */
     public void update() {
-        boolean nothingBeingPressed = true;
+        if (keyH.upPressed == true || keyH.downPressed || keyH.leftPressed || keyH.rightPressed) {
+            this.isMoving = true;
 
-        if (keyH.upPressed) {
-            nothingBeingPressed = false;
-            dir = Direction.UP;
-            y -= this.speed;
-        }
-        if (keyH.downPressed) {
-            nothingBeingPressed = false;
-            dir = Direction.DOWN;
-            y += this.speed;
-        }
-        if (keyH.leftPressed) {
-            nothingBeingPressed = false;
-            dir = Direction.LEFT;
-            x -= this.speed;
-        }
-        if (keyH.rightPressed) {
-            nothingBeingPressed = false;
-            dir = Direction.RIGHT;
-            x += this.speed;
-        }
-    
-        
-        spriteCounter++;
-        if (nothingBeingPressed) {
-            spriteNum = 3;
-
-        } else if(spriteCounter > 10) {
-            if (spriteNum == 1) {
-                spriteNum = 2;
-            } else {
-                spriteNum = 1;
+            if (keyH.upPressed) {
+                setDirection(Direction.UP);
+                this.y -= this.speed;
             }
-
-            spriteCounter = 0;
-        }
+            if (keyH.downPressed) {
+                setDirection(Direction.DOWN);
+                this.y += this.speed;
+            }
+            if (keyH.leftPressed) {
+                setDirection(Direction.LEFT);
+                this.x -= this.speed;
+            }
+            if (keyH.rightPressed) {
+                setDirection(Direction.RIGHT);
+                this.x += this.speed;
+            }
+        
+            spriteCounter++;
+            
+            if (spriteCounter > 10) {
+                if (spriteNum == 1) {
+                    spriteNum = 2;
+                } else {
+                    spriteNum = 1;
+                }
+                spriteCounter = 0;
+            }
+        }  
+        if (!this.isMoving) spriteNum = 3;
     }
 
+    /**
+     * DRAW IMAGES. PART 2 OF GAME LOOP.
+     * @param g2 Graphics 2D object from Gamepanel paintComponent Method.
+     */
     public void draw(Graphics2D g2) {
         BufferedImage image = null;
 
-        switch(dir) {
+        // Change image position depending on direction facing.
+        switch(getDirection()) {
             case UP:
                 if (spriteNum == 1) {
                     image = down1;
@@ -136,6 +150,7 @@ public class Player extends Entity {
                 break;
         }
 
-        g2.drawImage(image, x, y, gp.tileSize, gp.tileSize, null);
+        // Draw Player Image.
+        g2.drawImage(image, this.x, this.y, gp.tileSize, gp.tileSize, null);
     }
 }
