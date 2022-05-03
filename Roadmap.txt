@@ -6,11 +6,13 @@
 - Move sprite X
 - Animate sprite X
 - Add background/tiles X
-- Create big world map
-- Make new camera for player to stay in center of screen
-- background tiles move 
-- Add enemy
+- Create big world map X
+- Make new camera for player to stay in center of screen X
+- background tiles move X
+- Better Tiles & sprites
 - Add Attack
+- Add effects
+- Add enemy
 - Healthbars
 - Collision registration
 - Elements

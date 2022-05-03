@@ -22,7 +22,7 @@ public abstract class Entity {
     /**
      * Image Positions of entities. (One Idle for each side, 2 in motion.)
      */
-    public BufferedImage downIdle, down1, down2;
+    public BufferedImage downIdle, down1, down2, leftIdle, left1, left2, leftShooting, rightIdle, right1, right2, rightShooting;
 
     // ================================ For animation ==================================
     enum Direction {

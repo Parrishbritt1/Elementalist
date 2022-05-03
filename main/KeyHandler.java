@@ -7,6 +7,7 @@ import java.awt.event.KeyEvent;
 public class KeyHandler implements KeyListener {
     
     public boolean upPressed, downPressed, leftPressed, rightPressed;
+    public boolean primaryPressed, specialPressed, mobilityPressed;
 
     public void keyTyped(KeyEvent e) {} // Not used.
 
@@ -25,6 +26,15 @@ public class KeyHandler implements KeyListener {
         if (keyCode == KeyEvent.VK_D) { // D Key
             rightPressed = true;
         }
+        if (keyCode == KeyEvent.VK_J) {
+            primaryPressed = true;
+        }
+        if (keyCode == KeyEvent.VK_K) {
+            specialPressed = true;
+        }
+        if (keyCode == KeyEvent.VK_L) {
+            mobilityPressed = true;
+        }
     }
 
     public void keyReleased(KeyEvent e) {
@@ -41,6 +51,15 @@ public class KeyHandler implements KeyListener {
         }
         if (keyCode == KeyEvent.VK_D) {
             rightPressed = false;
+        }
+        if (keyCode == KeyEvent.VK_J) {
+            primaryPressed = false;
+        }
+        if (keyCode == KeyEvent.VK_K) {
+            specialPressed = false;
+        }
+        if (keyCode == KeyEvent.VK_L) {
+            mobilityPressed = false;
         }
     }
 }
