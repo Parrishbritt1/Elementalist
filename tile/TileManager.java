@@ -13,8 +13,8 @@ import javax.imageio.ImageIO;
 
 public class TileManager {
     GamePanel gp;
-    Tile[] tiles;
-    int[][] map;
+    public Tile[] tiles;
+    public int[][] map;
 
     public TileManager(GamePanel gp) {
         this.gp = gp;
@@ -29,6 +29,7 @@ public class TileManager {
 
             tiles[1] = new Tile();
             tiles[1].image = ImageIO.read(getClass().getResourceAsStream("../images/tiles/walls.png"));
+            tiles[1].collision = true;
 
         } catch (IOException e) {
             e.printStackTrace();

@@ -9,10 +9,12 @@
 - Create big world map X
 - Make new camera for player to stay in center of screen X
 - background tiles move X
+
 - Better Tiles & sprites
-- Add Attack
-- Add effects
-- Add enemy
+- Attack animations
+- Projectiles
+- Projectile tracking
+- Enemy
+- Enemy tracking
 - Healthbars
-- Collision registration
-- Elements
+- Collision registration walls/enemies

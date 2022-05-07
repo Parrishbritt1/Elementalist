@@ -1,6 +1,7 @@
 package entities;
 
 import java.awt.image.BufferedImage;
+import java.awt.Rectangle;
 
 public abstract class Entity {
     /**
@@ -25,7 +26,7 @@ public abstract class Entity {
     public BufferedImage downIdle, down1, down2, leftIdle, left1, left2, leftShooting, rightIdle, right1, right2, rightShooting;
 
     // ================================ For animation ==================================
-    enum Direction {
+    public enum Direction {
         UP, DOWN, LEFT, RIGHT;
     }
     private Direction dir;
@@ -42,4 +43,8 @@ public abstract class Entity {
 
     public int spriteCounter = 0; 
     public int spriteNum = 1;
+
+    public Rectangle collisionRect;
+    public boolean upColliding = false, downColliding = false, leftColliding = false, rightColliding = false;
+
 }

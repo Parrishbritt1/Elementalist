@@ -3,7 +3,9 @@ package entities;
 import main.KeyHandler;
 import main.GamePanel;
 
+import java.awt.Rectangle;
 import java.awt.Graphics2D;
+import java.awt.Color;
 import java.awt.image.BufferedImage;
 
 import java.io.IOException;
@@ -12,12 +14,13 @@ import javax.imageio.ImageIO;
 
 
 
+
+
 public class Player extends Entity {
     GamePanel gp;
     KeyHandler keyH;
 
     public final int screenX, screenY;
-
     /**
      * Constructor of Player
      * @param gp Game Panel 
@@ -43,6 +46,8 @@ public class Player extends Entity {
         this.worldY = gp.tileSize * 30;
         this.speed = 4;
         setDirection(Direction.DOWN);
+
+        collisionRect = new Rectangle(8, 32, 32, 32);
     }
 
     /**
@@ -69,30 +74,88 @@ public class Player extends Entity {
         }
     }
 
+
     /**
      * UPDATES PLAYER INFORMATION. Part 2 OF GAME LOOP (MOVING & ABILITIES info updates)
      */
     public void update() {
         // MOVEMENT
-        if (keyH.upPressed == true || keyH.downPressed || keyH.leftPressed || keyH.rightPressed) {
+        if (keyH.upPressed || keyH.downPressed || keyH.leftPressed || keyH.rightPressed) {
             this.isMoving = true;
+            
+            if (keyH.upPressed) setDirection(Direction.UP);
+            if (keyH.downPressed) setDirection(Direction.DOWN);
+            if (keyH.leftPressed) setDirection(Direction.LEFT);
+            if (keyH.rightPressed) setDirection(Direction.RIGHT);
+            
+            // Check Tile collision
+            gp.cChecker.checkTileCollision(this);
 
-            if (keyH.upPressed) {
-                setDirection(Direction.UP);
-                this.worldY -= this.speed;
+            if (upColliding) {
+                if (keyH.upPressed && keyH.rightPressed) {
+                    this.worldX += this.speed;  
+                } else if (keyH.rightPressed) {
+                    this.worldX += this.speed;
+                }
+
+                if (keyH.upPressed && keyH.leftPressed) {
+                    this.worldX -= this.speed;
+                } else if (keyH.leftPressed) {
+                    this.worldX -= this.speed;
+                }
+
+                if (keyH.downPressed) this.worldY += this.speed;
+
+            } else if (downColliding) {
+                if (keyH.downPressed && keyH.rightPressed) {
+                    this.worldX += this.speed;
+                } else if (keyH.rightPressed) {
+                    this.worldX += this.speed;
+                }
+
+                if (keyH.downPressed && keyH.leftPressed) {
+                    this.worldX -= this.speed;
+                } else if (keyH.leftPressed) {
+                    this.worldX -= this.speed;
+                }
+
+                if (keyH.upPressed) this.worldY -= this.speed;
+
+            } else if (rightColliding) {
+                if (keyH.rightPressed && keyH.upPressed) {
+                    this.worldY -= this.speed;
+                } else if (keyH.upPressed) {
+                    this.worldY -= this.speed;
+                }
+                if (keyH.rightPressed && keyH.downPressed) {
+                    this.worldY += this.speed;
+                } else if (keyH.downPressed) {
+                    this.worldY += this.speed;
+                }
+
+                if (keyH.leftPressed) this.worldX -= this.speed;
+
+            } else if (leftColliding) {
+                if (keyH.leftPressed && keyH.upPressed) {
+                    this.worldY -= this.speed;
+                } else if (keyH.upPressed) {
+                    this.worldY -= this.speed;
+                }
+                if (keyH.leftPressed && keyH.downPressed) {
+                    this.worldY += this.speed;
+                } else if (keyH.downPressed) {
+                    this.worldY += this.speed;
+                }
+
+                if (keyH.rightPressed) this.worldX += this.speed;
+
+            } else {
+                if (keyH.upPressed) this.worldY -= this.speed;
+                if (keyH.downPressed) this.worldY += this.speed;
+                if (keyH.leftPressed) this.worldX -= this.speed;
+                if (keyH.rightPressed) this.worldX += this.speed;
             }
-            if (keyH.downPressed) {
-                setDirection(Direction.DOWN);
-                this.worldY += this.speed;
-            }
-            if (keyH.leftPressed) {
-                setDirection(Direction.LEFT);
-                this.worldX -= this.speed;
-            }
-            if (keyH.rightPressed) {
-                setDirection(Direction.RIGHT);
-                this.worldX += this.speed;
-            }
+            
         
         // ANIMATION COUNTER
             spriteCounter++;
@@ -108,8 +171,6 @@ public class Player extends Entity {
         }  
         if (!this.isMoving) spriteNum = 3;
         this.isMoving = false;
-
-        
     }
 
     /**
@@ -186,5 +247,9 @@ public class Player extends Entity {
         // Draw Player Image.
         g2.drawImage(image, screenX, screenY, gp.tileSize, gp.tileSize, null);
 
+        // ==== DEBUG FOR SHOWING COLLISION BOX ====
+        Color myColor = new Color(255, 255, 255, 127);
+        g2.setColor(myColor);
+        g2.drawRect(this.collisionRect.x, this.collisionRect.y, this.collisionRect.width, this.collisionRect.height);
     }
 }
