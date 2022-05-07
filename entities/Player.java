@@ -74,6 +74,76 @@ public class Player extends Entity {
         }
     }
 
+    /**
+     * Updates player movement based on any collisions with tiles.
+     */
+    private void moveBasedOnCollision() {
+        if (upColliding) {
+            if (keyH.upPressed && keyH.rightPressed) {
+                this.worldX += this.speed;  
+            } else if (keyH.rightPressed) {
+                this.worldX += this.speed;
+            }
+
+            if (keyH.upPressed && keyH.leftPressed) {
+                this.worldX -= this.speed;
+            } else if (keyH.leftPressed) {
+                this.worldX -= this.speed;
+            }
+
+            if (keyH.downPressed) this.worldY += this.speed;
+
+        } else if (downColliding) {
+            if (keyH.downPressed && keyH.rightPressed) {
+                this.worldX += this.speed;
+            } else if (keyH.rightPressed) {
+                this.worldX += this.speed;
+            }
+
+            if (keyH.downPressed && keyH.leftPressed) {
+                this.worldX -= this.speed;
+            } else if (keyH.leftPressed) {
+                this.worldX -= this.speed;
+            }
+
+            if (keyH.upPressed) this.worldY -= this.speed;
+
+        } else if (rightColliding) {
+            if (keyH.rightPressed && keyH.upPressed) {
+                this.worldY -= this.speed;
+            } else if (keyH.upPressed) {
+                this.worldY -= this.speed;
+            }
+            if (keyH.rightPressed && keyH.downPressed) {
+                this.worldY += this.speed;
+            } else if (keyH.downPressed) {
+                this.worldY += this.speed;
+            }
+
+            if (keyH.leftPressed) this.worldX -= this.speed;
+
+        } else if (leftColliding) {
+            if (keyH.leftPressed && keyH.upPressed) {
+                this.worldY -= this.speed;
+            } else if (keyH.upPressed) {
+                this.worldY -= this.speed;
+            }
+            if (keyH.leftPressed && keyH.downPressed) {
+                this.worldY += this.speed;
+            } else if (keyH.downPressed) {
+                this.worldY += this.speed;
+            }
+
+            if (keyH.rightPressed) this.worldX += this.speed;
+
+        } else {
+            if (keyH.upPressed) this.worldY -= this.speed;
+            if (keyH.downPressed) this.worldY += this.speed;
+            if (keyH.leftPressed) this.worldX -= this.speed;
+            if (keyH.rightPressed) this.worldX += this.speed;
+        }
+    }
+
 
     /**
      * UPDATES PLAYER INFORMATION. Part 2 OF GAME LOOP (MOVING & ABILITIES info updates)
@@ -90,71 +160,7 @@ public class Player extends Entity {
             
             // Check Tile collision
             gp.cChecker.checkTileCollision(this);
-
-            if (upColliding) {
-                if (keyH.upPressed && keyH.rightPressed) {
-                    this.worldX += this.speed;  
-                } else if (keyH.rightPressed) {
-                    this.worldX += this.speed;
-                }
-
-                if (keyH.upPressed && keyH.leftPressed) {
-                    this.worldX -= this.speed;
-                } else if (keyH.leftPressed) {
-                    this.worldX -= this.speed;
-                }
-
-                if (keyH.downPressed) this.worldY += this.speed;
-
-            } else if (downColliding) {
-                if (keyH.downPressed && keyH.rightPressed) {
-                    this.worldX += this.speed;
-                } else if (keyH.rightPressed) {
-                    this.worldX += this.speed;
-                }
-
-                if (keyH.downPressed && keyH.leftPressed) {
-                    this.worldX -= this.speed;
-                } else if (keyH.leftPressed) {
-                    this.worldX -= this.speed;
-                }
-
-                if (keyH.upPressed) this.worldY -= this.speed;
-
-            } else if (rightColliding) {
-                if (keyH.rightPressed && keyH.upPressed) {
-                    this.worldY -= this.speed;
-                } else if (keyH.upPressed) {
-                    this.worldY -= this.speed;
-                }
-                if (keyH.rightPressed && keyH.downPressed) {
-                    this.worldY += this.speed;
-                } else if (keyH.downPressed) {
-                    this.worldY += this.speed;
-                }
-
-                if (keyH.leftPressed) this.worldX -= this.speed;
-
-            } else if (leftColliding) {
-                if (keyH.leftPressed && keyH.upPressed) {
-                    this.worldY -= this.speed;
-                } else if (keyH.upPressed) {
-                    this.worldY -= this.speed;
-                }
-                if (keyH.leftPressed && keyH.downPressed) {
-                    this.worldY += this.speed;
-                } else if (keyH.downPressed) {
-                    this.worldY += this.speed;
-                }
-
-                if (keyH.rightPressed) this.worldX += this.speed;
-
-            } else {
-                if (keyH.upPressed) this.worldY -= this.speed;
-                if (keyH.downPressed) this.worldY += this.speed;
-                if (keyH.leftPressed) this.worldX -= this.speed;
-                if (keyH.rightPressed) this.worldX += this.speed;
-            }
+            moveBasedOnCollision();
             
         
         // ANIMATION COUNTER
