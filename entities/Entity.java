@@ -5,7 +5,7 @@ import java.awt.Rectangle;
 
 public abstract class Entity {
     /**
-     * The X and Y positions on screen. (0, 0) top left.
+     * The X and Y positions in map. (0, 0) top left.
      */
     public int worldX, worldY;
     
@@ -18,7 +18,6 @@ public abstract class Entity {
      * Boolean to determine if entity is moving.
      */
     public boolean isMoving;
-
 
     /**
      * Image Positions of entities. (One Idle for each side, 2 in motion.)

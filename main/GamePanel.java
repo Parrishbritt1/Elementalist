@@ -2,6 +2,8 @@ package main;
 
 import javax.swing.JPanel;
 
+import abilities.Projectile;
+
 import java.awt.Graphics;
 import java.awt.Graphics2D;
 import java.awt.Color;
@@ -9,6 +11,8 @@ import java.awt.Dimension;
 
 import entities.Player;
 import tile.TileManager;
+
+import java.util.ArrayList;
 
 public class GamePanel extends JPanel implements Runnable {
     // Screen Settings
@@ -28,6 +32,8 @@ public class GamePanel extends JPanel implements Runnable {
     public final int worldHeight = tileSize * maxWorldRow;
 
     int FPS = 60;
+
+    public ArrayList<Projectile> projectileList = new ArrayList<>();
 
     TileManager tileManager = new TileManager(this);
     public CollisionChecker cChecker = new CollisionChecker(this);
@@ -81,6 +87,7 @@ public class GamePanel extends JPanel implements Runnable {
 
     public void update() {
         player.update();
+        for (Projectile p : projectileList) p.update();
     }
     
     @Override
@@ -91,7 +98,8 @@ public class GamePanel extends JPanel implements Runnable {
 
         tileManager.draw(g2);
         player.draw(g2);
-
+        for (Projectile p : projectileList) p.draw(g2);
+        
         g2.dispose(); // Releases system resources
     }
 }

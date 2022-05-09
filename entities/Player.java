@@ -5,15 +5,12 @@ import main.GamePanel;
 
 import java.awt.Rectangle;
 import java.awt.Graphics2D;
-import java.awt.Color;
 import java.awt.image.BufferedImage;
 
 import java.io.IOException;
-
 import javax.imageio.ImageIO;
 
-
-
+import abilities.*;
 
 
 public class Player extends Entity {
@@ -21,6 +18,9 @@ public class Player extends Entity {
     KeyHandler keyH;
 
     public final int screenX, screenY;
+
+    private PrimaryAttack primary;
+
     /**
      * Constructor of Player
      * @param gp Game Panel 
@@ -32,6 +32,7 @@ public class Player extends Entity {
 
         screenX = gp.screenWidth/2 - (gp.tileSize/2);
         screenY = gp.screenHeight/2 - (gp.tileSize/2);
+        primary = new PrimaryAttack(this.gp, this, Ability.FIREBALL);
 
         this.setStartValues();
         this.getPlayerImages();
@@ -42,12 +43,15 @@ public class Player extends Entity {
      */
     private void setStartValues() {
         // Set Players default position
-        this.worldX = gp.tileSize * 40;
-        this.worldY = gp.tileSize * 30;
+        this.worldX = gp.tileSize * 5;
+        this.worldY = gp.tileSize * 5;
         this.speed = 4;
         setDirection(Direction.DOWN);
-
         collisionRect = new Rectangle(8, 32, 32, 32);
+    }
+
+    public void setPrimary(Ability a) {
+        this.primary.setCurrentAbility(a);
     }
 
     /**
@@ -177,6 +181,11 @@ public class Player extends Entity {
         }  
         if (!this.isMoving) spriteNum = 3;
         this.isMoving = false;
+
+        if (keyH.primaryPressed) {
+            gp.projectileList.add(primary.triggerAbility());
+            System.out.println("Primary was pressed.");
+        }
     }
 
     /**
@@ -254,8 +263,8 @@ public class Player extends Entity {
         g2.drawImage(image, screenX, screenY, gp.tileSize, gp.tileSize, null);
 
         // ==== DEBUG FOR SHOWING COLLISION BOX ====
-        Color myColor = new Color(255, 255, 255, 127);
-        g2.setColor(myColor);
-        g2.drawRect(this.collisionRect.x, this.collisionRect.y, this.collisionRect.width, this.collisionRect.height);
+        // Color myColor = new Color(255, 255, 255, 127);
+        // g2.setColor(myColor);
+        // g2.drawRect(this.collisionRect.x, this.collisionRect.y, this.collisionRect.width, this.collisionRect.height);
     }
 }

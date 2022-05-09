@@ -1,3 +1,4 @@
+========================================= DONE-ISH =========================================
 - Create a window X
 - Create tiles X
 - Display a character X
@@ -9,12 +10,16 @@
 - Create big world map X
 - Make new camera for player to stay in center of screen X
 - background tiles move X
+- Collision registration walls X
+- Collision with entities X
 
+========================================= TODO =========================================
 - Better Tiles & sprites
 - Attack animations
 - Projectiles
+- Fix 
 - Projectile tracking
 - Enemy
 - Enemy tracking
 - Healthbars
-- Collision registration walls/enemies
+- Fix collision bug (glitch out map at corners of map)
