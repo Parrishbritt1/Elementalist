@@ -6,16 +6,17 @@ import main.GamePanel;
 import java.awt.Rectangle;
 import java.awt.Graphics2D;
 import java.awt.image.BufferedImage;
+import java.awt.event.KeyEvent;
 
 import java.io.IOException;
 import javax.imageio.ImageIO;
+
 
 import abilities.*;
 
 
 public class Player extends Entity {
     GamePanel gp;
-    KeyHandler keyH;
 
     public final int screenX, screenY;
 
@@ -26,13 +27,12 @@ public class Player extends Entity {
      * @param gp Game Panel 
      * @param keyH Key Handler
      */
-    public Player(GamePanel gp, KeyHandler keyH) {
+    public Player(GamePanel gp) {
         this.gp = gp;
-        this.keyH = keyH;
 
         screenX = gp.screenWidth/2 - (gp.tileSize/2);
         screenY = gp.screenHeight/2 - (gp.tileSize/2);
-        primary = new PrimaryAttack(this.gp, this, Ability.FIREBALL);
+        primary = new PrimaryAttack(this.gp, Ability.FIREBALL);
 
         this.setStartValues();
         this.getPlayerImages();
@@ -46,7 +46,7 @@ public class Player extends Entity {
         this.worldX = gp.tileSize * 5;
         this.worldY = gp.tileSize * 5;
         this.speed = 4;
-        setDirection(Direction.DOWN);
+        setDirection(Direction.S);
         collisionRect = new Rectangle(8, 32, 32, 32);
     }
 
@@ -82,69 +82,90 @@ public class Player extends Entity {
      * Updates player movement based on any collisions with tiles.
      */
     private void moveBasedOnCollision() {
-        if (upColliding) {
-            if (keyH.upPressed && keyH.rightPressed) {
-                this.worldX += this.speed;  
-            } else if (keyH.rightPressed) {
-                this.worldX += this.speed;
-            }
+        switch(getDirection()) {
+            case N:
+                if (upColliding) {
+                    break;
+                } else {
+                    this.worldY -= this.speed;
+                    break;
+                }
 
-            if (keyH.upPressed && keyH.leftPressed) {
-                this.worldX -= this.speed;
-            } else if (keyH.leftPressed) {
-                this.worldX -= this.speed;
-            }
+            case NE:
+                if (upColliding) {
+                    this.worldX += this.speed;
+                    break;
+                } else if (rightColliding) {
+                    this.worldY -= this.speed;
+                    break;
+                } else {
+                    this.worldX += this.speed;
+                    this.worldY -= this.speed;
+                    break;
+                }
 
-            if (keyH.downPressed) this.worldY += this.speed;
+            case E:
+                if (rightColliding) {
+                    break;
+                } else {
+                    this.worldX += this.speed;
+                    break;
+                }
+                
+            case SE:
+                if (downColliding) {
+                    this.worldX += this.speed;
+                    break;
+                } else if (rightColliding) {
+                    this.worldY += this.speed;
+                    break;
+                } else {
+                    this.worldX += this.speed;
+                    this.worldY += this.speed;
+                    break;
+                }
 
-        } else if (downColliding) {
-            if (keyH.downPressed && keyH.rightPressed) {
-                this.worldX += this.speed;
-            } else if (keyH.rightPressed) {
-                this.worldX += this.speed;
-            }
+            case S:
+                if (downColliding) {
+                    break;
+                } else {
+                    this.worldY += this.speed;
+                    break;
+                }
 
-            if (keyH.downPressed && keyH.leftPressed) {
-                this.worldX -= this.speed;
-            } else if (keyH.leftPressed) {
-                this.worldX -= this.speed;
-            }
+            case SW:
+                if (downColliding) {
+                    this.worldX -= this.speed;
+                    break;
+                } else if (leftColliding) {
+                    this.worldY += this.speed;
+                    break;
+                } else {
+                    this.worldX -= this.speed;
+                    this.worldY += this.speed;
+                    break;
+                }
 
-            if (keyH.upPressed) this.worldY -= this.speed;
+            case W:
+                if (leftColliding) {
+                    break;
+                } else {
+                    this.worldX -= this.speed;
+                    break;
+                }
 
-        } else if (rightColliding) {
-            if (keyH.rightPressed && keyH.upPressed) {
-                this.worldY -= this.speed;
-            } else if (keyH.upPressed) {
-                this.worldY -= this.speed;
-            }
-            if (keyH.rightPressed && keyH.downPressed) {
-                this.worldY += this.speed;
-            } else if (keyH.downPressed) {
-                this.worldY += this.speed;
-            }
-
-            if (keyH.leftPressed) this.worldX -= this.speed;
-
-        } else if (leftColliding) {
-            if (keyH.leftPressed && keyH.upPressed) {
-                this.worldY -= this.speed;
-            } else if (keyH.upPressed) {
-                this.worldY -= this.speed;
-            }
-            if (keyH.leftPressed && keyH.downPressed) {
-                this.worldY += this.speed;
-            } else if (keyH.downPressed) {
-                this.worldY += this.speed;
-            }
-
-            if (keyH.rightPressed) this.worldX += this.speed;
-
-        } else {
-            if (keyH.upPressed) this.worldY -= this.speed;
-            if (keyH.downPressed) this.worldY += this.speed;
-            if (keyH.leftPressed) this.worldX -= this.speed;
-            if (keyH.rightPressed) this.worldX += this.speed;
+            case NW:
+                if (upColliding) {
+                    this.worldX -= this.speed;
+                    break;
+                } else if (leftColliding) {
+                    this.worldY -= this.speed;
+                    break;
+                } else {
+                    this.worldX -= this.speed;
+                    this.worldY -= this.speed;
+                    break;
+                }
         }
     }
 
@@ -154,19 +175,41 @@ public class Player extends Entity {
      */
     public void update() {
         // MOVEMENT
-        if (keyH.upPressed || keyH.downPressed || keyH.leftPressed || keyH.rightPressed) {
+        if (KeyHandler.keySet.contains(KeyEvent.VK_W) || KeyHandler.keySet.contains(KeyEvent.VK_S) ||
+            KeyHandler.keySet.contains(KeyEvent.VK_A) || KeyHandler.keySet.contains(KeyEvent.VK_D)) {
             this.isMoving = true;
             
-            if (keyH.upPressed) setDirection(Direction.UP);
-            if (keyH.downPressed) setDirection(Direction.DOWN);
-            if (keyH.leftPressed) setDirection(Direction.LEFT);
-            if (keyH.rightPressed) setDirection(Direction.RIGHT);
+            if (KeyHandler.keySet.contains(KeyEvent.VK_W) && KeyHandler.keySet.contains(KeyEvent.VK_A)) {
+                System.out.println("upLeftPressed");
+                setDirection(Direction.NW);
+            } else if (KeyHandler.keySet.contains(KeyEvent.VK_W) && KeyHandler.keySet.contains(KeyEvent.VK_D)) {
+                System.out.println("upRightPressed");
+                setDirection(Direction.NE);
+            } else if (KeyHandler.keySet.contains(KeyEvent.VK_S) && KeyHandler.keySet.contains(KeyEvent.VK_A)) {
+                System.out.println("downLeftPressed");
+                setDirection(Direction.SW);
+            } else if (KeyHandler.keySet.contains(KeyEvent.VK_S) && KeyHandler.keySet.contains(KeyEvent.VK_D)) {
+                System.out.println("downRightPressed");
+                setDirection(Direction.SE);
+
+            } else if (KeyHandler.keySet.contains(KeyEvent.VK_W)) {
+                System.out.println("upPressed");
+                setDirection(Direction.N);
+            } else if (KeyHandler.keySet.contains(KeyEvent.VK_S)) {
+                System.out.println("downPressed");
+                setDirection(Direction.S);
+            } else if (KeyHandler.keySet.contains(KeyEvent.VK_A)) {
+                System.out.println("leftPressed");
+                setDirection(Direction.W);
+            } else if (KeyHandler.keySet.contains(KeyEvent.VK_D)) {
+                System.out.println("rightPressed");
+                setDirection(Direction.E);
+            }
             
             // Check Tile collision
             gp.cChecker.checkTileCollision(this);
             moveBasedOnCollision();
             
-        
         // ANIMATION COUNTER
             spriteCounter++;
             
@@ -182,9 +225,8 @@ public class Player extends Entity {
         if (!this.isMoving) spriteNum = 3;
         this.isMoving = false;
 
-        if (keyH.primaryPressed) {
+        if (KeyHandler.keySet.contains(KeyEvent.VK_J)) {
             gp.projectileList.add(primary.triggerAbility());
-            System.out.println("Primary was pressed.");
         }
     }
 
@@ -197,7 +239,7 @@ public class Player extends Entity {
 
         // Change image position depending on direction facing.
         switch(getDirection()) {
-            case UP:
+            case N:
                 if (spriteNum == 1) {
                     image = down1;
                 }
@@ -207,12 +249,12 @@ public class Player extends Entity {
                 if (spriteNum == 3) {
                     image = downIdle;
                 }
-                if (keyH.primaryPressed) {
+                if (KeyHandler.keySet.contains(KeyEvent.VK_J)) {
                     image = rightShooting;
                 }
                 break;
 
-            case DOWN:
+            case S:
                 if (spriteNum == 1) {
                     image = down1;
                 }
@@ -222,12 +264,14 @@ public class Player extends Entity {
                 if (spriteNum == 3) {
                     image = downIdle;
                 }
-                if (keyH.primaryPressed) {
+                if (KeyHandler.keySet.contains(KeyEvent.VK_J)) {
                     image = rightShooting;
                 }
                 break;
 
-            case LEFT:
+            case W:
+            case SW:
+            case NW:
                 if (spriteNum == 1) {
                     image = left1;
                 }
@@ -237,12 +281,14 @@ public class Player extends Entity {
                 if (spriteNum == 3) {
                     image = leftIdle;
                 }
-                if (keyH.primaryPressed) {
+                if (KeyHandler.keySet.contains(KeyEvent.VK_J)) {
                     image = leftShooting;
                 }
                 break;
 
-            case RIGHT:
+            case E:
+            case SE:
+            case NE:
                 if (spriteNum == 1) {
                     image = right1;
                 }
@@ -252,12 +298,11 @@ public class Player extends Entity {
                 if (spriteNum == 3) {
                     image = rightIdle;
                 }
-                if (keyH.primaryPressed) {
+                if (KeyHandler.keySet.contains(KeyEvent.VK_J)) {
                     image = rightShooting;
                 }
                 break;
         }
-        
 
         // Draw Player Image.
         g2.drawImage(image, screenX, screenY, gp.tileSize, gp.tileSize, null);

@@ -1,23 +1,20 @@
 package abilities;
 
-import entities.Player;
 import main.GamePanel;
 
 public class PrimaryAttack {
-    private Player player;
 
     private Ability currentAbility;
 
     private GamePanel gp;
     
-    public PrimaryAttack(GamePanel gp, Player player, Ability currentAbility) {
+    public PrimaryAttack(GamePanel gp, Ability currentAbility) {
         this.gp = gp;
-        this.player = player;
         this.currentAbility = currentAbility;
     }
 
-    public PrimaryAttack(GamePanel gp, Player player) {
-        this(gp, player, null);
+    public PrimaryAttack(GamePanel gp) {
+        this(gp, null);
     }
 
     public Ability getCurrentAbility() {
@@ -29,9 +26,10 @@ public class PrimaryAttack {
     }
 
     public Fireball triggerAbility() {
+
         switch(this.currentAbility) {
             case FIREBALL:
-                return new Fireball(this.gp, player.screenX, player.screenY);
+                return new Fireball(this.gp);
 
             default:
                 return null;

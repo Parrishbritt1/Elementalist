@@ -26,7 +26,7 @@ public abstract class Entity {
 
     // ================================ For animation ==================================
     public enum Direction {
-        UP, DOWN, LEFT, RIGHT;
+        N, NE, E, SE, S, SW, W, NW;
     }
     private Direction dir;
 
