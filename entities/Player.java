@@ -21,6 +21,7 @@ public class Player extends Entity {
     public final int screenX, screenY;
 
     private PrimaryAttack primary;
+    private long lastPrimaryClick;
 
     /**
      * Constructor of Player
@@ -48,6 +49,7 @@ public class Player extends Entity {
         this.speed = 4;
         setDirection(Direction.S);
         collisionRect = new Rectangle(8, 32, 32, 32);
+        lastPrimaryClick = -1;
     }
 
     public void setPrimary(Ability a) {
@@ -225,8 +227,13 @@ public class Player extends Entity {
         if (!this.isMoving) spriteNum = 3;
         this.isMoving = false;
 
+
+        long currentTime = System.nanoTime();
         if (KeyHandler.keySet.contains(KeyEvent.VK_J)) {
-            gp.projectileList.add(primary.triggerAbility());
+            if (lastPrimaryClick == -1 || currentTime - lastPrimaryClick > primary.getCurrentAbility().getCoolDown()) {
+                gp.projectileList.add(primary.triggerAbility());
+                lastPrimaryClick = System.nanoTime();
+            }
         }
     }
 

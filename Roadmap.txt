@@ -12,11 +12,11 @@
 - background tiles move X
 - Collision registration walls X
 - Collision with entities X
+- Projectiles X
 
 ========================================= TODO =========================================
 - Better Tiles & sprites
 - Attack animations
-- Projectiles
 - Fix 
 - Projectile tracking
 - Enemy

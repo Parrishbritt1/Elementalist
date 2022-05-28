@@ -16,7 +16,6 @@ public class Fireball extends Entity implements Projectile {
 
     private GamePanel gp;
     private int screenX, screenY, worldX, worldY;
-    private int damage;
     private BufferedImage N_IMAGE, NE_IMAGE, E_IMAGE, SE_IMAGE, S_IMAGE, SW_IMAGE, W_IMAGE, NW_IMAGE;
 
 
@@ -32,7 +31,6 @@ public class Fireball extends Entity implements Projectile {
         this.setDirection(gp.player.getDirection());
 
         this.speed = 10;
-        this.damage = 5;
         getImages();
     }
 
